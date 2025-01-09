@@ -41,6 +41,7 @@ const columns = ref([
         removableSort
         paginator
         :rows="5"
+        :totalRecords="120"
         tableStyle="min-width: 50rem"
       >
         <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
