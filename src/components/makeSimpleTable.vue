@@ -7,11 +7,17 @@ import { ref, inject } from 'vue';
 const injectedData = inject('eudemosData'); 
 const objects = ref(injectedData.eudemosData);
 
+const props = defineProps({
+  collumnInput: {
+    type: String,
+    default: 'backgroundvar1', // Removed unnecessary extra quotes
+  },
+});
 
-console.log(objects)
+// Access props 
+console.log(props.collumnInput); 
 
-
-//variables
+// Variables
 const selectedObjects = ref([]);
 const dataTable = ref([]);
 const object = ref({});
@@ -21,13 +27,12 @@ const filters = ref({
 
 const columns = ref([
   { field: 'id', header: 'ID' },
-
+  { field: props.collumnInput, header: 'Backgroundvar' }, // Add a dynamic column based on collumnInput
 ]);
 </script>
 
 <template>         
-
-<div>
+  <div>
     <div class="card">
       <DataTable
         ref="dataTable"

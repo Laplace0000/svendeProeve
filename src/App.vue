@@ -1,19 +1,28 @@
 <script>
 import makeSimpleTable from "../src/components/makeSimpleTable.vue";
-import { inject } from 'vue'; 
+import Buttonsimple from "../src/components/Buttonsimple.vue";
+import { ref, inject } from 'vue'; 
 export default {
+
   components: {
     makeSimpleTable,
-
-
+    Buttonsimple,
   },
-
 };
+const backgroundOptions = ref([
+  { name: 'backgroundvar1'},
+  { name: 'backgroundvar2'}
+]);
+
+// Model for selected choice
+const collumnChoice = 'backgroundvar1';
+
 
 </script>
 
 <template>
-<div class="card flex flex-wrap justify-center gap-4">
+
+  <div class="card flex flex-wrap justify-center gap-4">
     <div class="flex items-center gap-2">
         <Checkbox v-model="Health_factors" inputId="#1 Health factors" name="eudemos" value="Health factors" />
         <label for="#1 Health factors"> Health Factors </label>
@@ -22,21 +31,32 @@ export default {
         <Checkbox v-model="Bvar" inputId="ingredient2" name="pizza" value="Mushroom" />
         <label for="ingredient2"> Mushroom </label>
     </div>
-    <div class="flex items-center gap-2">
-        <Checkbox v-model="pizza" inputId="ingredient3" name="pizza" value="Pepper" />
-        <label for="ingredient3"> Pepper </label>
-    </div>
-    <div class="flex items-center gap-2">
-        <Checkbox v-model="pizza" inputId="ingredient4" name="pizza" value="Onion" />
-        <label for="ingredient4"> Onion </label>
-    </div>
-</div>
+  </div>
 
   <div class="card">
     <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">  User-Data - local source</h1>
-    <makeSimpleTable :filters = "filters"/>
+    <Buttonsimple :filterName="'healthFactors'" />
+    <Buttonsimple :filterName="'other'" />
   </div>
+  
+  <div>
+    <CascadeSelect
+      v-model="collumnChoice"
+      :options="backgroundOptions"
+      optionGroupLabel="name"
+    />
+    <p>Selected: {{ collumnChoice }}</p>
+  </div>
+  <div class="card">
+    <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">  User-Data - local source</h1>
+    <makeSimpleTable :collumnInput="collumnChoice" />
+
+  </div>
+
+
 </template>
+
+
 
 <style scoped>
 header {

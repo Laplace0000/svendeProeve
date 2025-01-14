@@ -9,7 +9,9 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import FileUpload from 'primevue/fileupload';
 import Toolbar from 'primevue/toolbar';
+import Checkbox from 'primevue/checkbox';
 import MultiSelect from 'primevue/multiselect';
+import CascadeSelect from 'primevue/cascadeselect';
 import ColumnGroup from 'primevue/columngroup';   
 import Row from 'primevue/row';
 import Aura from '@primevue/themes/aura';                   
@@ -78,6 +80,8 @@ app.component('Row', Row);
 app.component('InputText', InputText);
 app.component('Toast', Toast);
 app.component('MultiSelect', MultiSelect)
+app.component('Checkbox', Checkbox)
+app.component('CascadeSelect', CascadeSelect)
 
 
 

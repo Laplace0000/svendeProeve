@@ -1,6 +1,6 @@
 <template>
     <button @click="handleClick" :class="buttonClass">
-      <slot>Default Button</slot>
+      {{ filterName }}
     </button>
   </template>
   
@@ -12,10 +12,17 @@
         type: String,
         default: "btn-primary", // Default class for styling
       },
+      filterName: {
+        type: String,
+        default: "missing input",
+      }
+
     },
     methods: {
       handleClick() {
         this.$emit("click"); // Emit click event to the parent
+        console.log(this.filterName)
+
       },
     },
   };
