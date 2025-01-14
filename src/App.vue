@@ -15,11 +15,11 @@ export default {
 <template>
 <div class="card flex flex-wrap justify-center gap-4">
     <div class="flex items-center gap-2">
-        <Checkbox v-model="pizza" inputId="ingredient1" name="pizza" value="Cheese" />
-        <label for="ingredient1"> Cheese </label>
+        <Checkbox v-model="Health_factors" inputId="#1 Health factors" name="eudemos" value="Health factors" />
+        <label for="#1 Health factors"> Health Factors </label>
     </div>
     <div class="flex items-center gap-2">
-        <Checkbox v-model="pizza" inputId="ingredient2" name="pizza" value="Mushroom" />
+        <Checkbox v-model="Bvar" inputId="ingredient2" name="pizza" value="Mushroom" />
         <label for="ingredient2"> Mushroom </label>
     </div>
     <div class="flex items-center gap-2">
@@ -34,7 +34,7 @@ export default {
 
   <div class="card">
     <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">  User-Data - local source</h1>
-    <makeSimpleTable/>
+    <makeSimpleTable :filters = "filters"/>
   </div>
 </template>
 

@@ -7,6 +7,7 @@ export function openNew(object, objectDialog, submitted) {
 }
 
 
+
 export function hideDialog (objectDialog, submitted){
 
   objectDialog = false;
