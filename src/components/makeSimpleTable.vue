@@ -10,12 +10,35 @@ const objects = ref(injectedData.eudemosData);
 const props = defineProps({
   collumnInput: {
     type: String,
-    default: 'backgroundvar1', // Removed unnecessary extra quotes
+    default: 'backgroundvar1', 
+  },
+  topicFilterInput: {
+    type: String,
+    default: 'Health factors',
+
+  },
+  watch: {
+    topicFilterInput(newVal) {
+      console.log("Topic Filter updated:", newVal);
+      this.reloadTable();
+    },
+    collumnInput(newVal) {
+      console.log("Column Input updated:", newVal);
+      this.reloadTable();
+    },
+  },
+  methods: {
+    reloadTable() {
+      // Add logic to refresh or reload table data
+      console.log("Table reloaded with new props");
+    },
   },
 });
 
 // Access props 
 console.log(props.collumnInput); 
+console.log(props.topicFilterInput); 
+
 
 // Variables
 const selectedObjects = ref([]);
@@ -23,11 +46,13 @@ const dataTable = ref([]);
 const object = ref({});
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  topic_en: { value: props.topicFilterInput, matchMode: FilterMatchMode.CONTAINS },
 });
 
 const columns = ref([
   { field: 'id', header: 'ID' },
   { field: props.collumnInput, header: 'Backgroundvar' }, // Add a dynamic column based on collumnInput
+  { field: 'topic_en', header: 'Topic' }
 ]);
 </script>
 

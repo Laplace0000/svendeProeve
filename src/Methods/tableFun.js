@@ -6,6 +6,12 @@ export function openNew(object, objectDialog, submitted) {
     return {object: object, objectDialog: objectDialog, submitted: submitted};
 }
 
+export function handleTopicENfilterChoice(filterArgument) {
+  let newFilterChoice = "";
+  newFilterChoice = filterArgument;
+  return newFilterChoice;
+}
+
 
 
 export function hideDialog (objectDialog, submitted){
