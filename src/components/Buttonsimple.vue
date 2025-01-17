@@ -22,6 +22,7 @@
       handleClick() {
         this.$emit("click"); // Emit click event to the parent
         console.log(this.filterName)
+        
 
       },
     },

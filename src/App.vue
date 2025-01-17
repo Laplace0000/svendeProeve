@@ -53,17 +53,19 @@ export default {
   </div>
 
   <div class="card">
-    <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">
-      User-Data - local source
-    </h1>
-    <Buttonsimple :filterName="'Health factors'" @click="topicFilter.value = 'Health factors'" />
-    <Buttonsimple :filterName="'Important overload factors'" @click="topicFilter.value = 'Important overload factors'" />
-    <Buttonsimple :filterName="'Work causes'" @click="topicFilter.value = 'Work causes'" />
-    <Buttonsimple :filterName="'Relationship causes'" @click="topicFilter.value = 'Relationship causes'" />
-    <Buttonsimple :filterName="'Cultural causes'" @click="topicFilter.value = 'Cultural causes'" />
-    <Buttonsimple :filterName="'Occupational Health'" @click="topicFilter.value = 'Occupational Health'" />
-
+  <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">
+    User-Data - local source
+  </h1>
+  <div class="button-container">
+    <Buttonsimple :filterName="'Health factors'" @click="topicFilter = 'Health factors'" />
+    <Buttonsimple :filterName="'Important overload factors'" @click="topicFilter = 'Important overload factors'" />
+    <Buttonsimple :filterName="'Work causes'" @click="topicFilter = 'Work causes'" />
+    <Buttonsimple :filterName="'Relationship causes'" @click="topicFilter = 'Relationship causes'" />
+    <Buttonsimple :filterName="'Cultural causes'" @click="topicFilter = 'Cultural causes'" />
+    <Buttonsimple :filterName="'Occupational Health'" @click="topicFilter = 'Occupational Health'" />
   </div>
+</div>
+
 
   <div>
     <CascadeSelect
@@ -76,13 +78,20 @@ export default {
     <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">
       User-Data - local source
     </h1>
-    <makeSimpleTable :topicFilterInput="topicFilter.value" :collumnInput="collumnChoice" />
+    <makeSimpleTable :topicFilterInput="topicFilter" :collumnInput="collumnChoice" />
   </div>
 </template>
 
 <style scoped>
+
 header {
   line-height: 1.5;
+}
+.button-container {
+  display: flex;
+  gap: 10px; /* Adjust spacing between buttons */
+  justify-content: center; /* Center the buttons horizontally */
+  flex-wrap: wrap; /* Wrap buttons to the next line if there's not enough space */
 }
 
 .logo {
