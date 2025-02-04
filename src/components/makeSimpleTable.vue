@@ -25,10 +25,14 @@ const filters = ref({
   topic_en: { value: props.topicFilterInput, matchMode: FilterMatchMode.CONTAINS },
 });
 
+//makeTable
+
 const columns = ref([
   { field: 'id', header: 'ID' },
   { field: props.collumnInput, header: 'Backgroundvar' },
   { field: 'topic_en', header: 'Topic' },
+  { field: 'chapter_en', header: 'Chapter' },
+  { field: 'factor_en', header: 'Factor' },
   { field: 'red_flags', header: 'Red Flags' },
 ]);
 
@@ -43,7 +47,7 @@ watch(() => props.topicFilterInput, (newValue) => {
   <div>
     <div class="card">
       <DataTable
-        ref="dataTable"
+        ref="dataTable_chapter"
         :value="objects"
         :filters="filters"
         :globalFilterFields="columns.map(col => col.field)"
