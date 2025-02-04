@@ -23,12 +23,11 @@ export default {
     // Reactive topic filter (if needed elsewhere, otherwise keep as const)
     const topicFilter = ref("Health factors");
 
+
     // Return reactive properties to the template
     return {
       collumnChoice,
       topicFilter,
-
-      
     };
   },
 };
