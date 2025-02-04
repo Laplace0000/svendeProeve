@@ -1,56 +1,67 @@
 <script>
 import makeSimpleTable from "../src/components/makeSimpleTable.vue";
 import Buttonsimple from "../src/components/Buttonsimple.vue";
-import { ref, inject } from "vue";
+import MultiSelect from 'primevue/multiselect';
+
+import { ref, inject, computed } from "vue";
+
 export default {
   components: {
     makeSimpleTable,
     Buttonsimple,
+    MultiSelect,
   },
   setup() {
     // Reactive background options
-    const backgroundOptions = ref([
-      { name: "backgroundvar1" },
-      { name: "backgroundvar2" },
-    ]);
 
     // Reactive model for selected choice
-    const collumnChoice = ref("backgroundvar1");
+    const collumnChoice = ref();
+    const selectedBackgroundvar1 = ref();
+    const selectedBackgroundvar2 = ref();
+    const selectedBackgroundvar3 = ref();
+    const selectedBackgroundvar4 = ref();
+    const selectedBackgroundvar5 = ref();
 
     // Reactive topic filter (if needed elsewhere, otherwise keep as const)
     const topicFilter = ref("Health factors");
 
+    //inject data
+    const injectedData = inject('eudemosData'); 
+    const objects = ref(injectedData.eudemosData); // Wrap the data in an array
+    //const objects = ref(injectedData.map(value => ({ backgroundvar1: value })));
 
-    console.log(topicFilter);
+    console.log (objects)
 
+    // Compute unique values for backgroundvar1
+    const uniqueBackgroundVarOptions = computed(() => {
+      const backgroundVar1Values = objects.value.map(item => ({ backgroundvar1: item.backgroundvar1 }));
+      return [...new Map(backgroundVar1Values.map(item => [item.backgroundvar1, item])).values()];
+    });
+
+
+    console.log (uniqueBackgroundVarOptions)
+    
     // Return reactive properties to the template
     return {
       collumnChoice,
       topicFilter,
+      selectedBackgroundvar1,
+      selectedBackgroundvar2,
+      selectedBackgroundvar3,
+      selectedBackgroundvar4,
+      selectedBackgroundvar5,
+      injectedData,
+      objects,
+      uniqueBackgroundVarOptions,
     };
   },
 };
 </script>
 
 <template>
-  <div class="card flex flex-wrap justify-center gap-4">
-    <div class="flex items-center gap-2">
-      <Checkbox
-        inputId="#1 Health factors"
-        name="eudemos"
-        value="Health factors"
-      />
-      <label for="#1 Health factors"> Health Factors </label>
+    <div class="card flex justify-center">
+        <MultiSelect v-model="selectedBackgroundvar1" :options="uniqueBackgroundVarOptions" optionLabel="backgroundvar1" filter placeholder="Type" class="w-full md:w-80" />
     </div>
-    <div class="flex items-center gap-2">
-      <Checkbox
-        inputId="ingredient2"
-        name="pizza"
-        value="Mushroom"
-      />
-      <label for="ingredient2"> Mushroom </label>
-    </div>
-  </div>
 
   <div class="card">
   <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">
@@ -67,13 +78,7 @@ export default {
 </div>
 
 
-  <div>
-    <CascadeSelect
-      v-model="collumnChoice"
-      optionGroupLabel="name"
-    />
-    <p>Selected: {{ collumnChoice }}</p>
-  </div>
+
   <div class="card">
     <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">
       User-Data - local source

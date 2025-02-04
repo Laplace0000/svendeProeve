@@ -29,6 +29,7 @@ const columns = ref([
   { field: 'id', header: 'ID' },
   { field: props.collumnInput, header: 'Backgroundvar' },
   { field: 'topic_en', header: 'Topic' },
+  { field: 'red_flags', header: 'Red Flags' },
 ]);
 
 // Watch for changes to filters and update the filters
