@@ -2,66 +2,47 @@
 import makeSimpleTable from "../src/components/makeSimpleTable.vue";
 import Buttonsimple from "../src/components/Buttonsimple.vue";
 import MultiSelect from 'primevue/multiselect';
-
-import { ref, inject, computed } from "vue";
+import dropdownUniques from "./components/dropdownUniques.vue";
+import { ref } from "vue";
+import DropdownUniques from "./components/dropdownUniques.vue";
 
 export default {
   components: {
     makeSimpleTable,
     Buttonsimple,
     MultiSelect,
+    dropdownUniques,
   },
   setup() {
     // Reactive background options
 
     // Reactive model for selected choice
     const collumnChoice = ref();
-    const selectedBackgroundvar1 = ref();
-    const selectedBackgroundvar2 = ref();
-    const selectedBackgroundvar3 = ref();
-    const selectedBackgroundvar4 = ref();
-    const selectedBackgroundvar5 = ref();
+
 
     // Reactive topic filter (if needed elsewhere, otherwise keep as const)
     const topicFilter = ref("Health factors");
 
-    //inject data
-    const injectedData = inject('eudemosData'); 
-    const objects = ref(injectedData.eudemosData); // Wrap the data in an array
-    //const objects = ref(injectedData.map(value => ({ backgroundvar1: value })));
-
-    console.log (objects)
-
-    // Compute unique values for backgroundvar1
-    const uniqueBackgroundVarOptions = computed(() => {
-      const backgroundVar1Values = objects.value.map(item => ({ backgroundvar1: item.backgroundvar1 }));
-      return [...new Map(backgroundVar1Values.map(item => [item.backgroundvar1, item])).values()];
-    });
-
-
-    console.log (uniqueBackgroundVarOptions)
-    
     // Return reactive properties to the template
     return {
       collumnChoice,
       topicFilter,
-      selectedBackgroundvar1,
-      selectedBackgroundvar2,
-      selectedBackgroundvar3,
-      selectedBackgroundvar4,
-      selectedBackgroundvar5,
-      injectedData,
-      objects,
-      uniqueBackgroundVarOptions,
+
+      
     };
   },
 };
 </script>
 
 <template>
-    <div class="card flex justify-center">
-        <MultiSelect v-model="selectedBackgroundvar1" :options="uniqueBackgroundVarOptions" optionLabel="backgroundvar1" filter placeholder="Type" class="w-full md:w-80" />
-    </div>
+  <div class="button-container">
+    <dropdownUniques :backgroundvar="'backgroundvar2'" :title="'Level 1'" />
+    <dropdownUniques :backgroundvar="'backgroundvar3'" :title="'Level 2'" />
+    <dropdownUniques :backgroundvar="'backgroundvar4'" :title="'Level 3'" />
+    <dropdownUniques :backgroundvar="'backgroundvar5'" :title="'Level 4'" />
+    <dropdownUniques :backgroundvar="'backgroundvar1'" :title="'type'" />
+  </div>
+
 
   <div class="card">
   <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">
