@@ -14,7 +14,8 @@ const selectedFiltersDropdown = reactive({
   backgroundvar5: []
 });
 console.log(selectedFiltersDropdown)
-const selectedfactorchapter = ref("")
+const selectedfactor = ref("")
+const selectedchapter = ref("")
 const topicFilter = ref("#1 Health factors");
 watch(
   selectedFiltersDropdown,
@@ -34,9 +35,21 @@ watch(
 
 
 // Method to log button clicks
-const handleButtonClick = (event) => {
+const handleButtonClickchapter = (event) => {
   console.log(event.category); // Logs only the button name
-  selectedfactorchapter.value = event.category; // Correct assignment
+  if (selectedchapter.value === event.category) {
+    selectedchapter.value = ""; // Clear the selection if it's already selected
+  } else {
+    selectedchapter.value = event.category; // Set the new category if it's not selected
+  }
+};
+const handleButtonClickfactor = (event) => {
+  console.log(event.category); // Logs only the button name
+  if (selectedfactor.value === event.category) {
+    selectedfactor.value = ""; // Clear the selection if it's already selected
+  } else {
+    selectedfactor.value = event.category; // Set the new category if it's not selected
+  }
 };
 
 // Reactive topic filter
@@ -76,8 +89,8 @@ const converteddata = ref(injectedData.eudemosData);
 
 
   <div class="card-container">
-    <buttonbasedTable type="chapter_en" :data="converteddata" :topicFilter = "topicFilter" @buttonClicked="handleButtonClick" />
-    <buttonbasedTable type="factor_en" :data="converteddata" :topicFilter = "topicFilter" @buttonClicked="handleButtonClick" />
+    <buttonbasedTable type="chapter_en" :data="converteddata" :topicFilter = "topicFilter" :chosenChapter = "selectedchapter" :chosenFactor = "selectedfactor" @buttonClicked="handleButtonClickchapter" />
+    <buttonbasedTable type="factor_en" :data="converteddata" :topicFilter = "topicFilter" :chosenChapter = "selectedchapter" :chosenFactor = "selectedfactor" @buttonClicked="handleButtonClickfactor" />
   </div>
 
 

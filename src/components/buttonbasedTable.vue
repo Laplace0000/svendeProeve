@@ -6,6 +6,8 @@ const props = defineProps({
   type: String,
   data: Array,
   topicFilter: String,
+  chosenChapter: String,
+  chosenFactor: String,
 });
 
 // Directly use the prop 'topicFilter' in a computed property or as needed
