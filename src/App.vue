@@ -3,8 +3,9 @@ import makeSimpleTable from "../src/components/makeSimpleTable.vue";
 import Buttonsimple from "../src/components/Buttonsimple.vue";
 import MultiSelect from 'primevue/multiselect';
 import dropdownUniques from "./components/dropdownUniques.vue";
-import { ref } from "vue";
-import DropdownUniques from "./components/dropdownUniques.vue";
+import buttonbasedTable from "../src/components/buttonbasedTable.vue";
+import { ref, reactive, inject } from "vue";
+
 
 export default {
   components: {
@@ -12,22 +13,34 @@ export default {
     Buttonsimple,
     MultiSelect,
     dropdownUniques,
+    buttonbasedTable,
   },
   setup() {
-    // Reactive background options
+    // Reactive model for selected filters
+    const selectedFiltersDropdown = reactive({
+      backgroundvar1: [],
+      backgroundvar2: [],
+      backgroundvar3: [],
+      backgroundvar4: [],
+      backgroundvar5: []
+    });
 
-    // Reactive model for selected choice
-    const collumnChoice = ref();
-
-
-    // Reactive topic filter (if needed elsewhere, otherwise keep as const)
+    // Reactive topic filter
     const topicFilter = ref("Health factors");
 
+    // Handle updates from dropdowns
+    const updateSelection = ({ key, value }) => {
+      selectedFiltersDropdown[key] = value;
+    };
 
-    // Return reactive properties to the template
+    const injectedData = inject('eudemosData'); 
+    const converteddata = ref(injectedData.eudemosData);
+
     return {
-      collumnChoice,
+      selectedFiltersDropdown,
       topicFilter,
+      updateSelection,
+      converteddata,
     };
   },
 };
@@ -35,18 +48,15 @@ export default {
 
 <template>
   <div class="button-container">
-    <dropdownUniques :backgroundvar="'backgroundvar2'" :title="'Level 1'" />
-    <dropdownUniques :backgroundvar="'backgroundvar3'" :title="'Level 2'" />
-    <dropdownUniques :backgroundvar="'backgroundvar4'" :title="'Level 3'" />
-    <dropdownUniques :backgroundvar="'backgroundvar5'" :title="'Level 4'" />
-    <dropdownUniques :backgroundvar="'backgroundvar1'" :title="'type'" />
+    <dropdownUniques backgroundvar="backgroundvar2" title="Level 1" :data= "converteddata" @update:selected="updateSelection" />
+    <dropdownUniques backgroundvar="backgroundvar3" title="Level 2" :data= "converteddata" @update:selected="updateSelection" />
+    <dropdownUniques backgroundvar="backgroundvar4" title="Level 3" :data= "converteddata" @update:selected="updateSelection" />
+    <dropdownUniques backgroundvar="backgroundvar5" title="Level 4" :data= "converteddata" @update:selected="updateSelection" />
+    <dropdownUniques backgroundvar="backgroundvar1" title="type" :data= "converteddata" @update:selected="updateSelection" />
   </div>
 
 
   <div class="card">
-  <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">
-    User-Data - local source
-  </h1>
   <div class="button-container">
     <Buttonsimple :filterName="'Health factors'" @click="topicFilter = 'Health factors'" />
     <Buttonsimple :filterName="'Important overload factors'" @click="topicFilter = 'Important overload factors'" />
@@ -63,7 +73,11 @@ export default {
     <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">
       User-Data - local source
     </h1>
-    <makeSimpleTable :topicFilterInput="topicFilter" :collumnInput="collumnChoice" />
+    <makeSimpleTable :topicFilterInput="topicFilter" :collumnInput="collumnChoice" :selectedDropdown="selectedFiltersDropdown" :data="converteddata" />
+  </div>
+
+  <div class="card">
+    <buttonbasedTable :data="converteddata" />
   </div>
 </template>
 

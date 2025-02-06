@@ -4,10 +4,13 @@ import { FilterMatchMode } from '@primevue/core/api';
 import { ref, inject, watch } from 'vue';
 
 // Inject reactive user data
-const injectedData = inject('eudemosData'); 
-const objects = ref(injectedData.eudemosData);
+
 
 const props = defineProps({
+  data: {
+    type: Array,
+    default: [],
+  },
   collumnInput: {
     type: String,
     default: 'backgroundvar1', 
@@ -16,7 +19,13 @@ const props = defineProps({
     type: String,
     default: 'Health factors',
   },
+  selectedDropdown: {
+    type: Object,
+    default: 'Health factors',
+  },
 });
+const objects = ref(props.data);
+
 
 // Variables
 const selectedObjects = ref([]);
@@ -25,14 +34,12 @@ const filters = ref({
   topic_en: { value: props.topicFilterInput, matchMode: FilterMatchMode.CONTAINS },
 });
 
-//makeTable
-
 const columns = ref([
   { field: 'id', header: 'ID' },
   { field: props.collumnInput, header: 'Backgroundvar' },
   { field: 'topic_en', header: 'Topic' },
   { field: 'chapter_en', header: 'Chapter' },
-  { field: 'factor_en', header: 'Factor' },
+  { field: 'topic_en', header: 'Topic' },
   { field: 'red_flags', header: 'Red Flags' },
 ]);
 
@@ -40,6 +47,15 @@ const columns = ref([
 watch(() => props.topicFilterInput, (newValue) => {
   filters.value.topic_en.value = newValue;
 }, { immediate: true }); // Trigger immediately to handle the initial value
+
+// Watch for changes in selectedFilters and update selectedDropdown
+watch(() => props.selectedFilters, (newFilters) => {
+  selectedDropdown.value = Object.entries(newFilters)
+    .filter(([key, value]) => value.length > 0)
+    .map(([key]) => key)
+    .join(", ") || "None"; // Track which dropdown has selections
+}, { deep: true });
+
 </script>
 
 
@@ -47,7 +63,7 @@ watch(() => props.topicFilterInput, (newValue) => {
   <div>
     <div class="card">
       <DataTable
-        ref="dataTable_chapter"
+        ref="dataTable"
         :value="objects"
         :filters="filters"
         :globalFilterFields="columns.map(col => col.field)"

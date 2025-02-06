@@ -1,14 +1,15 @@
 <script setup>
 import MultiSelect from 'primevue/multiselect';
-import { ref, inject, computed, defineEmits } from "vue";
+import { ref, computed, defineEmits } from "vue";
 
-// Inject data
-const injectedData = inject('eudemosData'); 
-const objects = ref(injectedData.eudemosData);
 const selectedBackgroundvar = ref([]);
 
 // Define props
 const props = defineProps({
+  data: {
+    type: Array,
+    default: [], 
+  },
   backgroundvar: {
     type: String,
     default: 'backgroundvar1', 
@@ -18,13 +19,17 @@ const props = defineProps({
     default: 'variable', 
   },
 });
+const converteddataprop = ref(props.data);
+
+console.log(JSON.stringify(props.data));
+//console.log(JSON.stringify(converteddata));
 
 // Emit event to parent
 const emit = defineEmits(["update:selected"]);
 
 // Compute unique values for backgroundvar dynamically
 const uniqueBackgroundVarOptions = computed(() => {
-    const backgroundVarValues = objects.value.map(item => ({ backgroundvar: item[props.backgroundvar] }));
+    const backgroundVarValues = converteddataprop.value.map(item => ({ backgroundvar: item[props.backgroundvar] }));
     return [...new Map(backgroundVarValues.map(item => [item.backgroundvar, item])).values()];
 });
 
