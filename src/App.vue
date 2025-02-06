@@ -36,21 +36,23 @@ watch(
 
 // Method to log button clicks
 const handleButtonClickchapter = (event) => {
-  console.log(event.category); // Logs only the button name
+  console.log('Button clicked (chapter):', event.category);
   if (selectedchapter.value === event.category) {
-    selectedchapter.value = ""; // Clear the selection if it's already selected
+    selectedchapter.value = ""; // Clear selection
   } else {
-    selectedchapter.value = event.category; // Set the new category if it's not selected
+    selectedchapter.value = event.category; // Update selection
   }
 };
+
 const handleButtonClickfactor = (event) => {
-  console.log(event.category); // Logs only the button name
+  console.log('Button clicked (factor):', event.category);
   if (selectedfactor.value === event.category) {
-    selectedfactor.value = ""; // Clear the selection if it's already selected
+    selectedfactor.value = ""; // Clear selection
   } else {
-    selectedfactor.value = event.category; // Set the new category if it's not selected
+    selectedfactor.value = event.category; // Update selection
   }
 };
+
 
 // Reactive topic filter
 
@@ -87,10 +89,13 @@ const converteddata = ref(injectedData.eudemosData);
   </div>
 </div>
 
-
   <div class="card-container">
     <buttonbasedTable type="chapter_en" :data="converteddata" :topicFilter = "topicFilter" :chosenChapter = "selectedchapter" :chosenFactor = "selectedfactor" @buttonClicked="handleButtonClickchapter" />
     <buttonbasedTable type="factor_en" :data="converteddata" :topicFilter = "topicFilter" :chosenChapter = "selectedchapter" :chosenFactor = "selectedfactor" @buttonClicked="handleButtonClickfactor" />
+  </div>
+
+  <div class="card-container">
+    <test  :converteddata="converteddata" :topicFilter = "topicFilter" :chosenChapter = "selectedchapter"/>
   </div>
 
 

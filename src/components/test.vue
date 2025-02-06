@@ -4,16 +4,19 @@ import { computed, ref } from "vue";
 const props = defineProps({
   converteddata: Array,
   topicFilter: String,
+  chosenChapter: String,
 });
 
-// Directly use the prop 'topicFilter' in a computed property or as needed
+// Directly use the prop 'topicFilter' and 'chosenChapter' in a computed property
 const topicFilterlocal = ref(props.topicFilter);  // Correct initialization
 console.log(topicFilterlocal.value);  // Log the actual value
 
-// Function to filter data based on topic filter only
+// Function to filter data based on both topic filter and chosen chapter
 const filteredData = computed(() => {
   return props.converteddata.filter((item) => {
-    return item.topic_en === props.topicFilter;
+    const matchesTopic = item.topic_en === props.topicFilter;
+    const matchesChapter = !props.chosenChapter || item.chapter_en === props.chosenChapter;
+    return matchesTopic && matchesChapter;
   });
 });
 console.log(filteredData.value);  // Log the actual filtered data
@@ -23,7 +26,6 @@ const tableHeaders = computed(() => {
   return filteredData.value.length > 0 ? Object.keys(filteredData.value[0]) : [];
 });
 </script>
-
 
 <template>
   <div>

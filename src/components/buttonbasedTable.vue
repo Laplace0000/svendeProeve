@@ -10,18 +10,16 @@ const props = defineProps({
   chosenFactor: String,
 });
 
-// Directly use the prop 'topicFilter' in a computed property or as needed
-const topicFilterlocal = ref(props.topicFilter);  // Correct initialization
-console.log(topicFilterlocal.value);  // Log the actual value
-
-
-// Function to filter data based on topic filter only
+// Function to filter data based on topic filter, chosenChapter, and chosenFactor
 const filteredData = computed(() => {
+  console.log('Filtering data with:', props.topicFilter, props.chosenChapter, props.chosenFactor);
   return props.data.filter((item) => {
-    return item.topic_en === props.topicFilter;
+    const matchesTopic = item.topic_en === props.topicFilter;
+    const matchesChapter = !props.chosenChapter || item.chapter_en === props.chosenChapter;
+    const matchesFactor = !props.chosenFactor || item.factor_en === props.chosenFactor;
+    return matchesTopic && matchesChapter && matchesFactor;
   });
 });
-console.log(filteredData.value);  // Log the actual filtered data
 
 // Define emits
 const emit = defineEmits(["buttonClicked"]);
@@ -54,8 +52,10 @@ const formattedType = computed(() => {
 
 // Notify the parent when a button is clicked
 const notifyParent = (key, percentage) => {
+  console.log('Emitting button clicked:', key, percentage); // Check emitted values
   emit("buttonClicked", { category: key, percentage, type: props.type });
 };
+
 </script>
 
 <template>
