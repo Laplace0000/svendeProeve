@@ -16,22 +16,36 @@ const filteredData = computed(() => {
   console.log('Filtering data with:', props.topicFilter, props.chosenChapter, props.chosenFactor, props.dropdownfilters);
 
   return props.data.filter((item) => {
+    // Check if item matches topic, chapter, and factor filters
     const matchesTopic = item.topic_en === props.topicFilter;
     const matchesChapter = !props.chosenChapter || item.chapter_en === props.chosenChapter;
     const matchesFactor = !props.chosenFactor || item.factor_en === props.chosenFactor;
 
-    // Apply additional filtering based on selected filters in the dropdown
-    let matchesDropdownFilters = true;
+    // Exclude items based on selected dropdown filters
+    let excludeItem = false;
+
+    // Loop through each filter in the dropdown filters
     Object.keys(props.dropdownfilters).forEach((filterKey) => {
-      // If the dropdown filter is not empty, exclude the corresponding items
-      if (props.dropdownfilters[filterKey].length > 0) {
-        matchesDropdownFilters = matchesDropdownFilters && props.dropdownfilters[filterKey].includes(item[filterKey]);
+      const selectedValues = props.dropdownfilters[filterKey]; // The selected filter values for this key
+
+      // If the filter has selected values (i.e., its array is not empty), exclude matching items
+      if (selectedValues.length > 0) {
+        // Extract the "backgroundvar" from the selected filter object
+        const selectedValue = selectedValues[0].backgroundvar;
+
+        // Exclude item if the field value matches the selected backgroundvar
+        if (item[filterKey] === selectedValue) {
+          excludeItem = true; // Mark for exclusion if there's a match
+        }
       }
     });
 
-    return matchesTopic && matchesChapter && matchesFactor && matchesDropdownFilters;
+    // Return true if the item matches topic, chapter, factor, and is not excluded by dropdown filters
+    return matchesTopic && matchesChapter && matchesFactor && !excludeItem;
   });
 });
+
+
 
 
 // Define emits

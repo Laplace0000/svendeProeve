@@ -3,7 +3,6 @@ import { ref, watch, reactive, inject } from "vue";
 import Buttonsimple from "../src/components/Buttonsimple.vue";
 import dropdownUniques from "./components/dropdownUniques.vue";
 import buttonbasedTable from "../src/components/buttonbasedTable.vue";
-import test from "../src/components/test.vue";
 
 // Reactive model for selected filters
 const selectedFiltersDropdown = reactive({
