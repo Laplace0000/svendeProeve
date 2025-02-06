@@ -13,26 +13,19 @@ const selectedFiltersDropdown = reactive({
   backgroundvar4: [],
   backgroundvar5: []
 });
-console.log(selectedFiltersDropdown)
-const selectedfactor = ref("")
-const selectedchapter = ref("")
+console.log(selectedFiltersDropdown);
+
+const selectedfactor = ref("");
+const selectedchapter = ref("");
 const topicFilter = ref("#1 Health factors");
-watch(
-  selectedFiltersDropdown,
-  (newVal) => {
-    console.log("Filters updated:", JSON.stringify(newVal, null, 2));
-  },
-  { deep: true } // Ensures changes inside objects/arrays are detected
-);
 
-watch(
-  topicFilter,
-  (newVal) => {
-    console.log("topicFilter updated:", JSON.stringify(newVal, null, 2));
-  },
-  { deep: true }
-);
+watch(selectedFiltersDropdown, (newVal) => {
+  console.log("Filters updated:", JSON.stringify(newVal, null, 2));
+}, { deep: true });
 
+watch(topicFilter, (newVal) => {
+  console.log("topicFilter updated:", newVal);
+});
 
 // Method to log button clicks
 const handleButtonClickchapter = (event) => {
@@ -53,52 +46,47 @@ const handleButtonClickfactor = (event) => {
   }
 };
 
-
-// Reactive topic filter
-
+const handlefactorchapterReset = (filter) => {
+  console.log('Button clicked (factorandchapter reset):');
+  topicFilter.value = filter;  // Directly update topicFilter without "this"
+  selectedfactor.value = "";   // Clear selection
+  selectedchapter.value = "";  // Clear selection
+};
 
 // Handle updates from dropdowns
 const updateSelection = ({ key, value }) => {
   selectedFiltersDropdown[key] = value;
 };
 
-// Inject data
+// Injected data
 const injectedData = inject('eudemosData'); 
 const converteddata = ref(injectedData.eudemosData);
 </script>
 
-
 <template>
   <div class="button-container">
-    <dropdownUniques backgroundvar="backgroundvar2" title="Level 1" :data= "converteddata" @update:selected="updateSelection" />
-    <dropdownUniques backgroundvar="backgroundvar3" title="Level 2" :data= "converteddata" @update:selected="updateSelection" />
-    <dropdownUniques backgroundvar="backgroundvar4" title="Level 3" :data= "converteddata" @update:selected="updateSelection" />
-    <dropdownUniques backgroundvar="backgroundvar5" title="Level 4" :data= "converteddata" @update:selected="updateSelection" />
-    <dropdownUniques backgroundvar="backgroundvar1" title="type" :data= "converteddata" @update:selected="updateSelection" />
+    <dropdownUniques backgroundvar="backgroundvar2" title="Level 1" :data="converteddata" @update:selected="updateSelection" />
+    <dropdownUniques backgroundvar="backgroundvar3" title="Level 2" :data="converteddata" @update:selected="updateSelection" />
+    <dropdownUniques backgroundvar="backgroundvar4" title="Level 3" :data="converteddata" @update:selected="updateSelection" />
+    <dropdownUniques backgroundvar="backgroundvar5" title="Level 4" :data="converteddata" @update:selected="updateSelection" />
+    <dropdownUniques backgroundvar="backgroundvar1" title="type" :data="converteddata" @update:selected="updateSelection" />
   </div>
-
 
   <div class="card">
-  <div class="button-container">
-    <Buttonsimple :filterName="'Health factors'" @click="topicFilter = '#1 Health factors'" />
-    <Buttonsimple :filterName="'Important overload factors'" @click="topicFilter = '#2 Important overload factors (Topic)'" />
-    <Buttonsimple :filterName="'Work causes'" @click="topicFilter = '#3 Work causes'" />
-    <Buttonsimple :filterName="'Relationship causes'" @click="topicFilter = '#4 Relationship causes'" />
-    <Buttonsimple :filterName="'Cultural causes'" @click="topicFilter = '#5 Cultural causes'" />
-    <Buttonsimple :filterName="'Occupational Health'" @click="topicFilter = '#6 Occupational Health'" />
-  </div>
-</div>
-
-  <div class="card-container">
-    <buttonbasedTable type="chapter_en" :data="converteddata" :topicFilter = "topicFilter" :chosenChapter = "selectedchapter" :chosenFactor = "selectedfactor" @buttonClicked="handleButtonClickchapter" />
-    <buttonbasedTable type="factor_en" :data="converteddata" :topicFilter = "topicFilter" :chosenChapter = "selectedchapter" :chosenFactor = "selectedfactor" @buttonClicked="handleButtonClickfactor" />
+    <div class="button-container">
+      <Buttonsimple :filterName="'Health factors'" @click="handlefactorchapterReset('#1 Health factors')" />
+      <Buttonsimple :filterName="'Important overload factors'" @click="handlefactorchapterReset('#2 Important overload factors (Topic)')" />
+      <Buttonsimple :filterName="'Work causes'" @click="handlefactorchapterReset('#3 Work causes')" />
+      <Buttonsimple :filterName="'Relationship causes'" @click="handlefactorchapterReset('#4 Relationship causes')" />
+      <Buttonsimple :filterName="'Cultural causes'" @click="handlefactorchapterReset('#5 Cultural causes')" />
+      <Buttonsimple :filterName="'Occupational Health'" @click="handlefactorchapterReset('#6 Occupational Health')" />
+    </div>
   </div>
 
   <div class="card-container">
-    <test  :converteddata="converteddata" :topicFilter = "topicFilter" :chosenChapter = "selectedchapter"/>
+    <buttonbasedTable type="chapter_en" :data="converteddata" :topicFilter="topicFilter" :chosenChapter="selectedchapter" :chosenFactor="selectedfactor" :dropdownfilters="selectedFiltersDropdown" @buttonClicked="handleButtonClickchapter" />
+    <buttonbasedTable type="factor_en" :data="converteddata" :topicFilter="topicFilter" :chosenChapter="selectedchapter" :chosenFactor="selectedfactor" :dropdownfilters="selectedFiltersDropdown" @buttonClicked="handleButtonClickfactor" />
   </div>
-
-
 </template>
 
 <style scoped>
