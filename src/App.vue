@@ -15,7 +15,7 @@ const selectedFiltersDropdown = reactive({
 });
 console.log(selectedFiltersDropdown)
 const selectedfactorchapter = ref("")
-const topicFilter = ref("Health factors");
+const topicFilter = ref("#1 Health factors");
 watch(
   selectedFiltersDropdown,
   (newVal) => {
@@ -76,9 +76,11 @@ const converteddata = ref(injectedData.eudemosData);
 
 
   <div class="card-container">
-    <buttonbasedTable type="chapter_en" :data="converteddata" @buttonClicked="handleButtonClick" />
-    <buttonbasedTable type="factor_en" :data="converteddata" @buttonClicked="handleButtonClick" />
+    <buttonbasedTable type="chapter_en" :data="converteddata" :topicFilter = "topicFilter" @buttonClicked="handleButtonClick" />
+    <buttonbasedTable type="factor_en" :data="converteddata" :topicFilter = "topicFilter" @buttonClicked="handleButtonClick" />
   </div>
+
+
 </template>
 
 <style scoped>

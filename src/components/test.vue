@@ -1,10 +1,14 @@
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
   converteddata: Array,
   topicFilter: String,
 });
+
+// Directly use the prop 'topicFilter' in a computed property or as needed
+const topicFilterlocal = ref(props.topicFilter);  // Correct initialization
+console.log(topicFilterlocal.value);  // Log the actual value
 
 // Function to filter data based on topic filter only
 const filteredData = computed(() => {
@@ -12,12 +16,14 @@ const filteredData = computed(() => {
     return item.topic_en === props.topicFilter;
   });
 });
+console.log(filteredData.value);  // Log the actual filtered data
 
 // Get table headers dynamically based on first data entry
 const tableHeaders = computed(() => {
   return filteredData.value.length > 0 ? Object.keys(filteredData.value[0]) : [];
 });
 </script>
+
 
 <template>
   <div>

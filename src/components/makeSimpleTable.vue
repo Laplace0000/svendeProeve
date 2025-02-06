@@ -1,7 +1,7 @@
 <script setup>
 import { DataTable, Column } from 'primevue';
 import { FilterMatchMode } from '@primevue/core/api';
-import { ref, inject, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 // Inject reactive user data
 

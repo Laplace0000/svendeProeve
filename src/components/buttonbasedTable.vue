@@ -1,21 +1,35 @@
 <script setup>
-import { computed, defineProps, defineEmits } from "vue";
+import { computed, defineProps, defineEmits, ref } from "vue";
 
 // Define props
 const props = defineProps({
-  data: Array,
   type: String,
+  data: Array,
+  topicFilter: String,
 });
+
+// Directly use the prop 'topicFilter' in a computed property or as needed
+const topicFilterlocal = ref(props.topicFilter);  // Correct initialization
+console.log(topicFilterlocal.value);  // Log the actual value
+
+
+// Function to filter data based on topic filter only
+const filteredData = computed(() => {
+  return props.data.filter((item) => {
+    return item.topic_en === props.topicFilter;
+  });
+});
+console.log(filteredData.value);  // Log the actual filtered data
 
 // Define emits
 const emit = defineEmits(["buttonClicked"]);
 
-// Compute grouped data
+// Compute grouped data using filteredData
 const selectedOption = computed(() => props.type);
 
 const groupedData = computed(() => {
   const grouped = {};
-  props.data.forEach((item) => {
+  filteredData.value.forEach((item) => {
     const key = item[selectedOption.value]; 
     if (!grouped[key]) {
       grouped[key] = { count: 0, redFlagCount: 0 };
@@ -64,43 +78,42 @@ const notifyParent = (key, percentage) => {
 </template>
   
 
-  
-  <style scoped>
-  /* Header row styling */
-  .header-container {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    padding: 10px;
-    border-bottom: 2px solid #000;
-  }
-  
-  .header-item {
-    flex: 1; /* Ensures equal spacing for headers */
-    text-align: center;
-  }
-  
-  /* Data row styling */
-  .item-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  button {
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-    background-color: #ccc;
-    color: black;
-    border-radius: 4px;
-    text-align: center;
-  }
-  
-  .red-flag {
-    background-color: red;
-    color: white;
-  }
-  </style>
+<style scoped>
+/* Header row styling */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  padding: 10px;
+  border-bottom: 2px solid #000;
+}
+
+.header-item {
+  flex: 1; /* Ensures equal spacing for headers */
+  text-align: center;
+}
+
+/* Data row styling */
+.item-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+button {
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #ccc;
+  color: black;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.red-flag {
+  background-color: red;
+  color: white;
+}
+</style>
