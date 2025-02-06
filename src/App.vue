@@ -1,50 +1,47 @@
-<script>
-import makeSimpleTable from "../src/components/makeSimpleTable.vue";
+<script setup>
+import { ref, watch, reactive, inject } from "vue";
 import Buttonsimple from "../src/components/Buttonsimple.vue";
-import MultiSelect from 'primevue/multiselect';
 import dropdownUniques from "./components/dropdownUniques.vue";
 import buttonbasedTable from "../src/components/buttonbasedTable.vue";
-import { ref, reactive, inject } from "vue";
 
-
-export default {
-  components: {
-    makeSimpleTable,
-    Buttonsimple,
-    MultiSelect,
-    dropdownUniques,
-    buttonbasedTable,
+// Reactive model for selected filters
+const selectedFiltersDropdown = reactive({
+  backgroundvar1: [],
+  backgroundvar2: [],
+  backgroundvar3: [],
+  backgroundvar4: [],
+  backgroundvar5: []
+});
+watch(
+  selectedFiltersDropdown,
+  (newVal) => {
+    console.log("Filters updated:", JSON.stringify(newVal, null, 2));
   },
-  setup() {
-    // Reactive model for selected filters
-    const selectedFiltersDropdown = reactive({
-      backgroundvar1: [],
-      backgroundvar2: [],
-      backgroundvar3: [],
-      backgroundvar4: [],
-      backgroundvar5: []
-    });
+  { deep: true } // Ensures changes inside objects/arrays are detected
+);
+console.log(selectedFiltersDropdown)
+const selectedfactorchapter = ref("")
+const topicFilter = ref("Health factors");
 
-    // Reactive topic filter
-    const topicFilter = ref("Health factors");
-
-    // Handle updates from dropdowns
-    const updateSelection = ({ key, value }) => {
-      selectedFiltersDropdown[key] = value;
-    };
-
-    const injectedData = inject('eudemosData'); 
-    const converteddata = ref(injectedData.eudemosData);
-
-    return {
-      selectedFiltersDropdown,
-      topicFilter,
-      updateSelection,
-      converteddata,
-    };
-  },
+// Method to log button clicks
+const handleButtonClick = (event) => {
+  console.log(event.category); // Logs only the button name
+  selectedfactorchapter.value = event.category; // Correct assignment
 };
+
+// Reactive topic filter
+
+
+// Handle updates from dropdowns
+const updateSelection = ({ key, value }) => {
+  selectedFiltersDropdown[key] = value;
+};
+
+// Inject data
+const injectedData = inject('eudemosData'); 
+const converteddata = ref(injectedData.eudemosData);
 </script>
+
 
 <template>
   <div class="button-container">
@@ -67,52 +64,26 @@ export default {
   </div>
 </div>
 
-
-
-  <div class="card">
-    <h1 style="font-size: 2rem; color: #007bff; text-align: center; margin-bottom: 20px;">
-      User-Data - local source
-    </h1>
-    <makeSimpleTable :topicFilterInput="topicFilter" :collumnInput="collumnChoice" :selectedDropdown="selectedFiltersDropdown" :data="converteddata" />
-  </div>
-
-  <div class="card">
-    <buttonbasedTable :data="converteddata" />
+  <div class="card-container">
+    <buttonbasedTable type="chapter_en" :data="converteddata" @buttonClicked="handleButtonClick" />
+    <buttonbasedTable type="factor_en" :data="converteddata" @buttonClicked="handleButtonClick" />
   </div>
 </template>
 
 <style scoped>
-
-header {
-  line-height: 1.5;
-}
-.button-container {
+/* Flexbox container for side-by-side layout */
+.card-container {
   display: flex;
-  gap: 10px; /* Adjust spacing between buttons */
-  justify-content: center; /* Center the buttons horizontally */
-  flex-wrap: wrap; /* Wrap buttons to the next line if there's not enough space */
+  gap: 20px; /* Adjusts spacing between the two tables */
+  justify-content: center; /* Centers both tables horizontally */
+  align-items: flex-start; /* Aligns tables at the top */
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+/* Optional: Ensuring each button table takes equal space */
+buttonbasedTable {
+  flex: 1; /* Each table takes equal space */
+  min-width: 300px; /* Prevents excessive shrinking */
+  max-width: 600px; /* Limits maximum width */
 }
 </style>
