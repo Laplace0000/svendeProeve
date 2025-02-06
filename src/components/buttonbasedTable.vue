@@ -8,18 +8,31 @@ const props = defineProps({
   topicFilter: String,
   chosenChapter: String,
   chosenFactor: String,
+  dropdownfilters: Object,
 });
 
 // Function to filter data based on topic filter, chosenChapter, and chosenFactor
 const filteredData = computed(() => {
-  console.log('Filtering data with:', props.topicFilter, props.chosenChapter, props.chosenFactor);
+  console.log('Filtering data with:', props.topicFilter, props.chosenChapter, props.chosenFactor, props.dropdownfilters);
+
   return props.data.filter((item) => {
     const matchesTopic = item.topic_en === props.topicFilter;
     const matchesChapter = !props.chosenChapter || item.chapter_en === props.chosenChapter;
     const matchesFactor = !props.chosenFactor || item.factor_en === props.chosenFactor;
-    return matchesTopic && matchesChapter && matchesFactor;
+
+    // Apply additional filtering based on selected filters in the dropdown
+    let matchesDropdownFilters = true;
+    Object.keys(props.dropdownfilters).forEach((filterKey) => {
+      // If the dropdown filter is not empty, exclude the corresponding items
+      if (props.dropdownfilters[filterKey].length > 0) {
+        matchesDropdownFilters = matchesDropdownFilters && props.dropdownfilters[filterKey].includes(item[filterKey]);
+      }
+    });
+
+    return matchesTopic && matchesChapter && matchesFactor && matchesDropdownFilters;
   });
 });
+
 
 // Define emits
 const emit = defineEmits(["buttonClicked"]);
