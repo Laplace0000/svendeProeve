@@ -13,6 +13,9 @@ const selectedFiltersDropdown = reactive({
   backgroundvar4: [],
   backgroundvar5: []
 });
+console.log(selectedFiltersDropdown)
+const selectedfactorchapter = ref("")
+const topicFilter = ref("Health factors");
 watch(
   selectedFiltersDropdown,
   (newVal) => {
@@ -20,9 +23,15 @@ watch(
   },
   { deep: true } // Ensures changes inside objects/arrays are detected
 );
-console.log(selectedFiltersDropdown)
-const selectedfactorchapter = ref("")
-const topicFilter = ref("Health factors");
+
+watch(
+  topicFilter,
+  (newVal) => {
+    console.log("topicFilter updated:", JSON.stringify(newVal, null, 2));
+  },
+  { deep: true }
+);
+
 
 // Method to log button clicks
 const handleButtonClick = (event) => {
