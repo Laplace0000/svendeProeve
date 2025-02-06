@@ -21,7 +21,6 @@ const props = defineProps({
 });
 const converteddataprop = ref(props.data);
 
-console.log(JSON.stringify(props.data));
 //console.log(JSON.stringify(converteddata));
 
 // Emit event to parent

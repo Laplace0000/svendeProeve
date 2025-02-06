@@ -3,6 +3,7 @@ import { ref, watch, reactive, inject } from "vue";
 import Buttonsimple from "../src/components/Buttonsimple.vue";
 import dropdownUniques from "./components/dropdownUniques.vue";
 import buttonbasedTable from "../src/components/buttonbasedTable.vue";
+import test from "../src/components/test.vue";
 
 // Reactive model for selected filters
 const selectedFiltersDropdown = reactive({
@@ -55,14 +56,15 @@ const converteddata = ref(injectedData.eudemosData);
 
   <div class="card">
   <div class="button-container">
-    <Buttonsimple :filterName="'Health factors'" @click="topicFilter = 'Health factors'" />
-    <Buttonsimple :filterName="'Important overload factors'" @click="topicFilter = 'Important overload factors'" />
-    <Buttonsimple :filterName="'Work causes'" @click="topicFilter = 'Work causes'" />
-    <Buttonsimple :filterName="'Relationship causes'" @click="topicFilter = 'Relationship causes'" />
-    <Buttonsimple :filterName="'Cultural causes'" @click="topicFilter = 'Cultural causes'" />
-    <Buttonsimple :filterName="'Occupational Health'" @click="topicFilter = 'Occupational Health'" />
+    <Buttonsimple :filterName="'Health factors'" @click="topicFilter = '#1 Health factors'" />
+    <Buttonsimple :filterName="'Important overload factors'" @click="topicFilter = '#2 Important overload factors (Topic)'" />
+    <Buttonsimple :filterName="'Work causes'" @click="topicFilter = '#3 Work causes'" />
+    <Buttonsimple :filterName="'Relationship causes'" @click="topicFilter = '#4 Relationship causes'" />
+    <Buttonsimple :filterName="'Cultural causes'" @click="topicFilter = '#5 Cultural causes'" />
+    <Buttonsimple :filterName="'Occupational Health'" @click="topicFilter = '#6 Occupational Health'" />
   </div>
 </div>
+
 
   <div class="card-container">
     <buttonbasedTable type="chapter_en" :data="converteddata" @buttonClicked="handleButtonClick" />
