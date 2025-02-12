@@ -3,6 +3,7 @@ import { ref, watch, reactive, inject } from "vue";
 import Buttonsimple from "../src/components/Buttonsimple.vue";
 import dropdownUniques from "./components/dropdownUniques.vue";
 import buttonbasedTable from "../src/components/buttonbasedTable.vue";
+import persistentbuttonbasedtable from "./components/persistentbuttonbasedtable.vue";
 
 // Reactive model for selected filters
 const selectedFiltersDropdown = reactive({
@@ -85,6 +86,37 @@ const converteddata = ref(injectedData.eudemosData);
   <div class="card-container">
     <buttonbasedTable type="chapter_en" :data="converteddata" :topicFilter="topicFilter" :chosenChapter="selectedchapter" :chosenFactor="selectedfactor" :dropdownfilters="selectedFiltersDropdown" @buttonClicked="handleButtonClickchapter" />
     <buttonbasedTable type="factor_en" :data="converteddata" :topicFilter="topicFilter" :chosenChapter="selectedchapter" :chosenFactor="selectedfactor" :dropdownfilters="selectedFiltersDropdown" @buttonClicked="handleButtonClickfactor" />
+  </div>
+  <div class="card-container">
+    <persistentbuttonbasedtable 
+      type="low" 
+      :data="converteddata" 
+      :topicFilter="topicFilter" 
+      :chosenChapter="selectedchapter" 
+      :chosenFactor="selectedfactor" 
+      :dropdownfilters="selectedFiltersDropdown" 
+      @buttonClicked="handleButtonClick"
+    />
+
+    <persistentbuttonbasedtable 
+      type="medium" 
+      :data="converteddata" 
+      :topicFilter="topicFilter" 
+      :chosenChapter="selectedchapter" 
+      :chosenFactor="selectedfactor" 
+      :dropdownfilters="selectedFiltersDropdown" 
+      @buttonClicked="handleButtonClick"
+    />
+
+    <persistentbuttonbasedtable 
+      type="high" 
+      :data="converteddata" 
+      :topicFilter="topicFilter" 
+      :chosenChapter="selectedchapter" 
+      :chosenFactor="selectedfactor" 
+      :dropdownfilters="selectedFiltersDropdown" 
+      @buttonClicked="handleButtonClick"
+    />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineProps, defineEmits, ref } from "vue";
+import { computed, defineProps, defineEmits } from "vue";
 
 // Define props
 const props = defineProps({
@@ -13,7 +13,7 @@ const props = defineProps({
 
 // Function to filter data based on topic filter, chosenChapter, and chosenFactor
 const filteredData = computed(() => {
-  console.log('Filtering data with:', props.topicFilter, props.chosenChapter, props.chosenFactor, props.dropdownfilters);
+  console.log('Filtering data with:', props.topicFilter, props.dropdownfilters);
 
   return props.data.filter((item) => {
     // Check if item matches topic, chapter, and factor filters
@@ -26,27 +26,23 @@ const filteredData = computed(() => {
 
     // Loop through each filter in the dropdown filters
     Object.keys(props.dropdownfilters).forEach((filterKey) => {
-      const selectedValues = props.dropdownfilters[filterKey]; // The selected filter values for this key
+      const selectedValues = props.dropdownfilters[filterKey]; // Array of selected filter objects
 
-      // If the filter has selected values (i.e., its array is not empty), exclude matching items
       if (selectedValues.length > 0) {
-        // Extract the "backgroundvar" from the selected filter object
-        const selectedValue = selectedValues[0].backgroundvar;
+        // Extract all backgroundvar values from selected filter objects
+        const selectedBackgroundVars = selectedValues.map(val => val.backgroundvar);
 
-        // Exclude item if the field value matches the selected backgroundvar
-        if (item[filterKey] === selectedValue) {
-          excludeItem = true; // Mark for exclusion if there's a match
+        // Exclude item if its field value exists in the selected values array
+        if (selectedBackgroundVars.includes(item[filterKey])) {
+          excludeItem = true;
         }
       }
     });
 
-    // Return true if the item matches topic, chapter, factor, and is not excluded by dropdown filters
+    // Return true if the item matches filters and is not excluded
     return matchesTopic && matchesChapter && matchesFactor && !excludeItem;
   });
 });
-
-
-
 
 // Define emits
 const emit = defineEmits(["buttonClicked"]);
@@ -56,19 +52,26 @@ const selectedOption = computed(() => props.type);
 
 const groupedData = computed(() => {
   const grouped = {};
+
   filteredData.value.forEach((item) => {
     const key = item[selectedOption.value]; 
     if (!grouped[key]) {
       grouped[key] = { count: 0, redFlagCount: 0 };
     }
+
     grouped[key].count += 1;
-    if (parseInt(item.red_flags) === 1) {
+
+    // Ensure red_flags is parsed correctly (handles numbers & strings)
+    if (parseInt(item.red_flags) === 1 || item.red_flags === "1") {
       grouped[key].redFlagCount += 1;
     }
   });
+
+  // Calculate red flag percentages
   Object.keys(grouped).forEach((key) => {
     grouped[key].redFlagPercentage = (grouped[key].redFlagCount / grouped[key].count) * 100;
   });
+
   return grouped;
 });
 
@@ -79,33 +82,32 @@ const formattedType = computed(() => {
 
 // Notify the parent when a button is clicked
 const notifyParent = (key, percentage) => {
-  console.log('Emitting button clicked:', key, percentage); // Check emitted values
+  console.log('Emitting button clicked:', key, percentage);
   emit("buttonClicked", { category: key, percentage, type: props.type });
 };
-
 </script>
 
 <template>
-    <div>
-      <!-- Table Headers -->
-      <div class="header-container">
-        <div class="header-item">{{ formattedType }}</div> <!-- Dynamic type name -->
-        <div class="header-item">Red Flags</div> <!-- Fixed label for red flags -->
-      </div>
-  
-      <!-- Data Rows -->
-      <div v-for="(item, key) in groupedData" :key="key" class="item-container">
-        <p>{{ key }}</p>
-        <button 
-          :class="{ 'red-flag': item.redFlagPercentage > 0 }"
-          @click="notifyParent(key, item.redFlagPercentage)"
-        >
-          {{ item.redFlagPercentage.toFixed(2) }}%
-        </button>
-      </div>
+  <div>
+    <!-- Table Headers -->
+    <div class="header-container">
+      <div class="header-item">{{ formattedType }}</div> <!-- Dynamic type name -->
+      <div class="header-item">Red Flags</div> <!-- Fixed label for red flags -->
     </div>
+
+    <!-- Data Rows -->
+    <div v-for="(item, key) in groupedData" :key="key" class="item-container">
+      <p>{{ key }}</p>
+      <button 
+        :class="{ 'red-flag': item.redFlagPercentage > 0 }"
+        @click="notifyParent(key, item.redFlagPercentage)"
+        :aria-label="`${key} has ${item.redFlagPercentage.toFixed(2)}% red flags`"
+      >
+        {{ item.redFlagPercentage.toFixed(2) }}%
+      </button>
+    </div>
+  </div>
 </template>
-  
 
 <style scoped>
 /* Header row styling */
@@ -139,6 +141,11 @@ button {
   color: black;
   border-radius: 4px;
   text-align: center;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #bbb;
 }
 
 .red-flag {
