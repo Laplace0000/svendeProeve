@@ -1,6 +1,5 @@
 <script setup>
-import { computed, defineProps } from "vue";
-
+import { computed, defineProps, defineEmits } from "vue";
 
 // Define props
 const props = defineProps({
@@ -28,7 +27,7 @@ const filteredData = computed(() => {
     const matchesChapter = !props.chosenChapter || item.chapter_en === props.chosenChapter;
     const matchesFactor = !props.chosenFactor || item.factor_en === props.chosenFactor;
 
-    // **Fixed filtering logic**: Ensure items match selected dropdown filters
+    // **Ensure items match selected dropdown filters**
     let includeItem = true;
     Object.keys(props.dropdownfilters).forEach((filterKey) => {
       const selectedValues = props.dropdownfilters[filterKey].map(val => val.backgroundvar);
@@ -80,9 +79,9 @@ const categorizedData = computed(() => {
       return acc;
     }, {});
 
-  // If companyChoice is set and exists in the result, filter to only show it
-  if (props.companyChoice) {
-    return result[props.companyChoice] ? { [props.companyChoice]: result[props.companyChoice] } : {};
+  // If `companyChoice` is set and found in the result, keep all data but make it bold
+  if (props.companyChoice && !result[props.companyChoice]) {
+    return {}; // If companyChoice is missing, show no data
   }
 
   return result;
