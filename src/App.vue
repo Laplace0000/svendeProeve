@@ -18,6 +18,7 @@ console.log(selectedFiltersDropdown);
 const selectedfactor = ref("");
 const selectedchapter = ref("");
 const topicFilter = ref("#1 Health factors");
+const companyChoice = ref("");
 
 watch(selectedFiltersDropdown, (newVal) => {
   console.log("Filters updated:", JSON.stringify(newVal, null, 2));
@@ -45,6 +46,16 @@ const handleButtonClickfactor = (event) => {
     selectedfactor.value = event.category; // Update selection
   }
 };
+
+const handleClickCompany = (event) => {
+  console.log('Button clicked (factor):', event.category);
+  if (companyChoice.value === event.category) {
+    companyChoice.value = ""; // Clear selection
+  } else {
+    companyChoice.value = event.category; // Update selection
+  }
+};
+
 
 const handlefactorchapterReset = (filter) => {
   console.log('Button clicked (factorandchapter reset):');
@@ -94,8 +105,9 @@ const converteddata = ref(injectedData.eudemosData);
       :topicFilter="topicFilter" 
       :chosenChapter="selectedchapter" 
       :chosenFactor="selectedfactor" 
+      :companyChoice="companyChoice"
       :dropdownfilters="selectedFiltersDropdown" 
-      @buttonClicked="handleButtonClick"
+      @buttonClicked="handleClickCompany"
     />
 
     <persistentbuttonbasedtable 
@@ -104,8 +116,9 @@ const converteddata = ref(injectedData.eudemosData);
       :topicFilter="topicFilter" 
       :chosenChapter="selectedchapter" 
       :chosenFactor="selectedfactor" 
+      :companyChoice="companyChoice"
       :dropdownfilters="selectedFiltersDropdown" 
-      @buttonClicked="handleButtonClick"
+      @buttonClicked="handleClickCompany"
     />
 
     <persistentbuttonbasedtable 
@@ -114,8 +127,9 @@ const converteddata = ref(injectedData.eudemosData);
       :topicFilter="topicFilter" 
       :chosenChapter="selectedchapter" 
       :chosenFactor="selectedfactor" 
+      :companyChoice="companyChoice"
       :dropdownfilters="selectedFiltersDropdown" 
-      @buttonClicked="handleButtonClick"
+      @buttonClicked="handleClickCompany"
     />
   </div>
 </template>

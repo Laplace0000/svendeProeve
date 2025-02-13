@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^12.3.0",
+    "chart.js": "^4.4.7",
     "clusterize.js": "^1.0.0",
     "primeicons": "^7.0.0",
     "primevue": "^4.2.5",

@@ -1,6 +1,7 @@
 <script setup>
 import { computed, defineProps, defineEmits } from "vue";
 
+
 // Define props
 const props = defineProps({
   type: String, // Determines whether to show low, medium, or high red flag groups
@@ -8,6 +9,7 @@ const props = defineProps({
   topicFilter: String,
   chosenChapter: String,
   chosenFactor: String,
+  companyChoice: String,
   dropdownfilters: Object,
 });
 
@@ -65,7 +67,7 @@ const groupedData = computed(() => {
 
 // Function to determine which category the item falls into
 const categorizedData = computed(() => {
-  return Object.entries(groupedData.value)
+  let result = Object.entries(groupedData.value)
     .filter(([_, item]) => {
       const percentage = item.redFlagPercentage;
       if (props.type === "low") return percentage < 16;
@@ -77,6 +79,13 @@ const categorizedData = computed(() => {
       acc[key] = value;
       return acc;
     }, {});
+
+  // If companyChoice is set and exists in the result, filter to only show it
+  if (props.companyChoice) {
+    return result[props.companyChoice] ? { [props.companyChoice]: result[props.companyChoice] } : {};
+  }
+
+  return result;
 });
 
 // Emit event on button click
@@ -89,25 +98,30 @@ const notifyParent = (key, percentage) => {
 
 <template>
   <div>
-    <!-- Table Headers -->
+    <!-- Table Headers (Always Visible) -->
     <div class="header-container">
       <div class="header-item">{{ title }}</div>
       <div class="header-item"></div>
     </div>
 
-    <!-- Data Rows -->
-    <div v-for="(item, key) in categorizedData" :key="key" class="item-container">
-      <p>{{ key }}</p>
-      <button
-        :class="{
-          'red-flag-low': props.type === 'low',
-          'red-flag-medium': props.type === 'medium',
-          'red-flag-high': props.type === 'high'
-        }"
-        @click="notifyParent(key, item.redFlagPercentage)"
-      >
-        {{ item.redFlagPercentage.toFixed(2) }}%
-      </button>
+    <!-- Table Body (Only Show Rows if companyChoice Exists in Data) -->
+    <div v-if="Object.keys(categorizedData).length > 0">
+      <div v-for="(item, key) in categorizedData" :key="key" class="item-container">
+        <p :class="{ 'bold-text': key === companyChoice }">{{ key }}</p>
+        <button
+          :class="{
+            'red-flag-low': props.type === 'low',
+            'red-flag-medium': props.type === 'medium',
+            'red-flag-high': props.type === 'high'
+          }"
+          @click="notifyParent(key, item.redFlagPercentage)"
+        >
+          {{ item.redFlagPercentage.toFixed(2) }}%
+        </button>
+      </div>
+    </div>
+    <div v-else class="empty-message">
+      <!-- No data rows, but the table structure remains -->
     </div>
   </div>
 </template>
@@ -159,5 +173,18 @@ button {
 .red-flag-high {
   background-color: red;
   color: white;
+}
+
+/* Bold text styling */
+.bold-text {
+  font-weight: bold;
+}
+
+/* Empty message styling */
+.empty-message {
+  text-align: center;
+  padding: 10px;
+  font-style: italic;
+  color: #888;
 }
 </style>

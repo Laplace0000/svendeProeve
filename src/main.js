@@ -14,18 +14,21 @@ import MultiSelect from 'primevue/multiselect';
 import CascadeSelect from 'primevue/cascadeselect';
 import ColumnGroup from 'primevue/columngroup';   
 import Row from 'primevue/row';
-import Aura from '@primevue/themes/aura';                   
+//import Aura from '@primevue/themes/aura';                   
 import InputText from 'primevue/inputtext';
 import ToastService from 'primevue/toastservice';
 import Toast from 'primevue/toast'; // Import the Toast component
 import DialogService from 'primevue/dialogservice'
+import Chart from 'primevue/chart';
+
 
 const app = createApp(App);
-app.use(PrimeVue, {
-    theme: {
-        preset: Aura
-    }
-});
+app.use(PrimeVue, { unstyled: true });
+//app.use(PrimeVue, {
+//    theme: {
+//        preset: Aura
+//    }
+//});
 
 //Fetcing json data for all components and views 
 (async () => {
@@ -82,6 +85,7 @@ app.component('Toast', Toast);
 app.component('MultiSelect', MultiSelect)
 app.component('Checkbox', Checkbox)
 app.component('CascadeSelect', CascadeSelect)
+app.component('Chart', Chart)
 
 
 
