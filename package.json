@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@primevue/themes": "^4.2.5",
     "@vueuse/core": "^12.3.0",
     "chart.js": "^4.4.7",
     "clusterize.js": "^1.0.0",
