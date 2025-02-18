@@ -4,6 +4,7 @@ import Buttonsimple from "../src/components/Buttonsimple.vue";
 import dropdownUniques from "./components/dropdownUniques.vue";
 import buttonbasedTable from "../src/components/buttonbasedTable.vue";
 import persistentbuttonbasedtable from "./components/persistentbuttonbasedtable.vue";
+import redflagGraph from "./components/redflagGraph.vue";
 
 // Reactive model for selected filters
 const selectedFiltersDropdown = reactive({
@@ -131,6 +132,10 @@ const converteddata = ref(injectedData.eudemosData);
       :dropdownfilters="selectedFiltersDropdown" 
       @buttonClicked="handleClickCompany"
     />
+  </div>
+
+  <div class="card-container">
+    <redflagGraph type="chapter_en" :data="converteddata" :topicFilter="topicFilter" :chosenChapter="selectedchapter" :chosenFactor="selectedfactor" :dropdownfilters="selectedFiltersDropdown" />
   </div>
 </template>
 

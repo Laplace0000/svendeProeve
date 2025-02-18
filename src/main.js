@@ -35,7 +35,8 @@ app.use(PrimeVue, {
     const dataSources = [
         //dataHandler.fetch0('./data/eudemos_new.json'),
         //dataHandler.fetch0('./data/user2ndhalf.json'),
-        dataHandler.fetch0('./data/euds.json'),
+        //dataHandler.fetch0('./data/euds.json'),
+        dataHandler.fetch0('./data/dataSample.json'),
     ];
 
     const results = await Promise.allSettled(dataSources);
