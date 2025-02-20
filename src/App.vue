@@ -20,6 +20,15 @@ const selectedfactor = ref("");
 const selectedchapter = ref("");
 const topicFilter = ref("#1 Health factors");
 const companyChoice = ref("");
+const selectedOverallFilters = ref(new Set());
+
+
+
+watch(selectedOverallFilters, (newVal) => {
+    console.log("Overall Filters updated:", Array.from(newVal));
+}, { deep: true });
+
+
 
 watch(selectedFiltersDropdown, (newVal) => {
   console.log("Filters updated:", JSON.stringify(newVal, null, 2));
@@ -69,6 +78,26 @@ const handlefactorchapterReset = (filter) => {
 const updateSelection = ({ key, value }) => {
   selectedFiltersDropdown[key] = value;
 };
+
+const handleOverallComparison = (filter) => {
+    const filters = new Set(selectedOverallFilters.value); // Clone set
+    if (filters.has(filter)) {
+        filters.delete(filter);
+    } else {
+        filters.add(filter);
+    }
+    selectedOverallFilters.value = filters; // Replace to trigger reactivity
+    console.log("Updated Filters:", Array.from(selectedOverallFilters.value));
+};
+
+
+const handleOverallComparisonReset = () => {
+  selectedOverallFilters.value = new Set(); // Replace with new Set
+  console.log("Filters Reset:", Array.from(selectedOverallFilters.value)); 
+};
+
+
+
 
 // Injected data
 const injectedData = inject('eudemosData'); 
@@ -132,6 +161,19 @@ const converteddata = ref(injectedData.eudemosData);
       :dropdownfilters="selectedFiltersDropdown" 
       @buttonClicked="handleClickCompany"
     />
+  </div>
+
+  <div class="card">
+    <b> Overall comparison</b>
+    <div class="button-container">
+      <Buttonsimple :filterName="'Level 1'" @click="handleOverallComparison('backgroundvar2')" />
+      <Buttonsimple :filterName="'Level 2'" @click="handleOverallComparison('backgroundvar3')" />
+      <Buttonsimple :filterName="'Level 3'" @click="handleOverallComparison('backgroundvar4')" />
+      <Buttonsimple :filterName="'Level 4'" @click="handleOverallComparison('backgroundvar5')" />
+      <Buttonsimple :filterName="'Type'" @click="handleOverallComparison('backgroundvar1')" />
+      <Buttonsimple :filterName="'Factor'" @click="handleOverallComparison('factortext_en')" />
+      <Buttonsimple :filterName="'Reset'" @click="handleOverallComparisonReset()" />
+    </div>
   </div>
 
   <div class="card-container">
