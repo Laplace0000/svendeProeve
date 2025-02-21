@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineProps, defineEmits } from "vue";
+import { computed, defineProps, defineEmits, toRefs } from "vue";
 
 // Define props
 const props = defineProps({
@@ -10,8 +10,11 @@ const props = defineProps({
   chosenFactor: String,
   companyChoice: String,
   dropdownfilters: Object,
-  overallfiltering: Object,
+  overallfiltering: Object, // New filtering variable
 });
+
+// Convert overallfiltering into reactive refs
+const overallFilters = toRefs(props.overallfiltering);
 
 // Compute the title dynamically based on type
 const title = computed(() => {
@@ -21,20 +24,27 @@ const title = computed(() => {
   return "";
 });
 
-
-
-// Function to filter data based on topic filter, chapter, and factor
+// **Function to filter data based on all criteria (dropdowns + overall filtering)**
 const filteredData = computed(() => {
   return props.data.filter((item) => {
     const matchesTopic = item.topic_en === props.topicFilter;
     const matchesChapter = !props.chosenChapter || item.chapter_en === props.chosenChapter;
     const matchesFactor = !props.chosenFactor || item.factor_en === props.chosenFactor;
 
-    // **Ensure items match selected dropdown filters**
     let includeItem = true;
+
+    // **Apply dropdown filters**
     Object.keys(props.dropdownfilters).forEach((filterKey) => {
       const selectedValues = props.dropdownfilters[filterKey].map(val => val.backgroundvar);
       if (selectedValues.length && !selectedValues.includes(item[filterKey])) {
+        includeItem = false;
+      }
+    });
+
+    // **Apply overall filtering criteria**
+    Object.keys(overallFilters).forEach((key) => {
+      const filterValue = overallFilters[key].value;
+      if (filterValue && item[key] !== undefined && item[key] !== filterValue) {
         includeItem = false;
       }
     });
@@ -43,7 +53,7 @@ const filteredData = computed(() => {
   });
 });
 
-// Compute grouped data using filteredData, grouped by `backgroundvar2`
+// **Group data using filteredData, grouped by `backgroundvar2`**
 const groupedData = computed(() => {
   const grouped = {};
   filteredData.value.forEach((item) => {
@@ -57,7 +67,7 @@ const groupedData = computed(() => {
     }
   });
 
-  // **Fix division by zero issue**
+  // **Prevent division by zero**
   Object.keys(grouped).forEach((key) => {
     grouped[key].redFlagPercentage = grouped[key].count
       ? (grouped[key].redFlagCount / grouped[key].count) * 100
@@ -67,7 +77,7 @@ const groupedData = computed(() => {
   return grouped;
 });
 
-// Function to determine which category the item falls into
+// **Filter & categorize data based on red flag percentages**
 const categorizedData = computed(() => {
   let result = Object.entries(groupedData.value)
     .filter(([_, item]) => {
@@ -82,9 +92,9 @@ const categorizedData = computed(() => {
       return acc;
     }, {});
 
-  // If `companyChoice` is set and found in the result, keep all data but make it bold
+  // **If `companyChoice` is set and not in result, show no data**
   if (props.companyChoice && !result[props.companyChoice]) {
-    return {}; // If companyChoice is missing, show no data
+    return {};
   }
 
   return result;
@@ -123,7 +133,7 @@ const notifyParent = (key, percentage) => {
       </div>
     </div>
     <div v-else class="empty-message">
-      <!-- No data rows, but the table structure remains -->
+      No data available based on the selected filters.
     </div>
   </div>
 </template>
@@ -153,8 +163,8 @@ const notifyParent = (key, percentage) => {
 }
 
 button {
-  padding: 8px 12px; /* Increased padding for better readability */
-  font-size: 14px; /* Improved font size */
+  padding: 8px 12px;
+  font-size: 14px;
   border: none;
   cursor: pointer;
   border-radius: 4px;

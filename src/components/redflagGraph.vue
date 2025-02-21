@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineProps } from "vue";
+import { computed, defineProps, toRefs } from "vue";
 import Chart from "primevue/chart";
 
 // Define props
@@ -11,8 +11,11 @@ const props = defineProps({
   chosenFactor: String,
   companyChoice: String,
   dropdownfilters: Object,
-  overallfiltering: Object,
+  overallfiltering: Object, // The reactive object containing filtering criteria
 });
+
+// Convert overallfiltering into reactive refs
+const overallFilters = toRefs(props.overallfiltering);
 
 // Compute the title dynamically based on type
 const title = computed(() => {
@@ -22,9 +25,7 @@ const title = computed(() => {
   return "";
 });
 
-
-
-// Function to filter data based on topic filter, chapter, and factor
+// Function to filter data based on topic filter, chapter, factor, dropdown filters, and overall filtering
 const filteredData = computed(() => {
   return props.data.filter((item) => {
     const matchesTopic = item.topic_en === props.topicFilter;
@@ -32,12 +33,24 @@ const filteredData = computed(() => {
     const matchesFactor = !props.chosenFactor || item.factor_en === props.chosenFactor;
 
     let includeItem = true;
+
+    // Apply dropdown filters
     Object.keys(props.dropdownfilters).forEach((filterKey) => {
       const selectedValues = props.dropdownfilters[filterKey].map(val => val.backgroundvar);
       if (selectedValues.length && !selectedValues.includes(item[filterKey])) {
         includeItem = false;
       }
     });
+
+    // Apply overall filtering criteria
+    Object.keys(overallFilters).forEach((key) => {
+      const filterValue = overallFilters[key].value;
+      if (filterValue && typeof filterValue === "string" && item[key] !== undefined && item[key] !== filterValue) {
+        includeItem = false;
+      }
+    });
+
+
 
     return matchesTopic && matchesChapter && matchesFactor && includeItem;
   });

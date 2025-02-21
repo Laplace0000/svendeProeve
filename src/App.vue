@@ -36,6 +36,7 @@ const OverallComparisonPacket = ref({
   type: OverallComparisonType,
   factor: OverallComparisonFactor
 });
+
 watch(selectedFiltersDropdown, (newVal) => {
   console.log("Filters updated:", JSON.stringify(newVal, null, 2));
 }, { deep: true });
@@ -219,10 +220,7 @@ const converteddata = ref(injectedData.eudemosData);
         :filterName="'Reset'" 
         @click="handleOverallComparisonReset()"   
       />
-      <Buttonsimple 
-        :filterName="'Test'" 
-        @click="handletest()"   
-      />
+
     </div>
 
   </div>
