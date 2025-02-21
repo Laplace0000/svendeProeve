@@ -20,15 +20,13 @@ const selectedfactor = ref("");
 const selectedchapter = ref("");
 const topicFilter = ref("#1 Health factors");
 const companyChoice = ref("");
-const selectedOverallFilters = ref(new Set());
 
-
-
-watch(selectedOverallFilters, (newVal) => {
-    console.log("Overall Filters updated:", Array.from(newVal));
-}, { deep: true });
-
-
+const OverallComparisonLevel1 = ref("");
+const OverallComparisonLevel2 = ref("");
+const OverallComparisonLevel3 = ref("");
+const OverallComparisonLevel4 = ref("");
+const OverallComparisonType = ref("");
+const OverallComparisonFactor = ref("");
 
 watch(selectedFiltersDropdown, (newVal) => {
   console.log("Filters updated:", JSON.stringify(newVal, null, 2));
@@ -67,6 +65,16 @@ const handleClickCompany = (event) => {
 };
 
 
+const handleOverallComparisonUpdate = (level, value) => {
+  console.log(`Updating ${level}: ${value} (Previous: ${eval(level).value})`);
+  if (eval(level).value === value) {
+    eval(level).value = "";
+  } else {
+    eval(level).value = value;
+  }
+};
+
+
 const handlefactorchapterReset = (filter) => {
   console.log('Button clicked (factorandchapter reset):');
   topicFilter.value = filter;  // Directly update topicFilter without "this"
@@ -79,23 +87,27 @@ const updateSelection = ({ key, value }) => {
   selectedFiltersDropdown[key] = value;
 };
 
-const handleOverallComparison = (filter) => {
-    const filters = new Set(selectedOverallFilters.value); // Clone set
-    if (filters.has(filter)) {
-        filters.delete(filter);
-    } else {
-        filters.add(filter);
-    }
-    selectedOverallFilters.value = filters; // Replace to trigger reactivity
-    console.log("Updated Filters:", Array.from(selectedOverallFilters.value));
-};
 
 
 const handleOverallComparisonReset = () => {
-  selectedOverallFilters.value = new Set(); // Replace with new Set
-  console.log("Filters Reset:", Array.from(selectedOverallFilters.value)); 
+  OverallComparisonLevel1.value = "";
+  OverallComparisonLevel2.value = "";
+  OverallComparisonLevel3.value = "";
+  OverallComparisonLevel4.value = "";
+  OverallComparisonType.value = "";
+  OverallComparisonFactor.value = "";
+  console.log("Filters Reset:");
 };
 
+const handletest = () => {
+  console.log("Debugging Overall Comparison Values:");
+  console.log("Level 1:", OverallComparisonLevel1.value);
+  console.log("Level 2:", OverallComparisonLevel2.value);
+  console.log("Level 3:", OverallComparisonLevel3.value);
+  console.log("Level 4:", OverallComparisonLevel4.value);
+  console.log("Type:", OverallComparisonType.value);
+  console.log("Factor:", OverallComparisonFactor.value);
+};
 
 
 
@@ -166,14 +178,42 @@ const converteddata = ref(injectedData.eudemosData);
   <div class="card">
     <b> Overall comparison</b>
     <div class="button-container">
-      <Buttonsimple :filterName="'Level 1'" @click="handleOverallComparison('backgroundvar2')" />
-      <Buttonsimple :filterName="'Level 2'" @click="handleOverallComparison('backgroundvar3')" />
-      <Buttonsimple :filterName="'Level 3'" @click="handleOverallComparison('backgroundvar4')" />
-      <Buttonsimple :filterName="'Level 4'" @click="handleOverallComparison('backgroundvar5')" />
-      <Buttonsimple :filterName="'Type'" @click="handleOverallComparison('backgroundvar1')" />
-      <Buttonsimple :filterName="'Factor'" @click="handleOverallComparison('factortext_en')" />
-      <Buttonsimple :filterName="'Reset'" @click="handleOverallComparisonReset()" />
+
+      <Buttonsimple 
+      filterName="Level 1"
+      @click="handleOverallComparisonUpdate('OverallComparisonLevel1', 'backgroundvar2')"
+      />
+      <Buttonsimple  
+        filterName="Level 2"
+        @click="handleOverallComparisonUpdate('OverallComparisonLevel2', 'backgroundvar3')"
+      />
+      <Buttonsimple  
+        filterName="Level 3"
+        @click="handleOverallComparisonUpdate('OverallComparisonLevel3', 'backgroundvar4')"
+      />
+      <Buttonsimple  
+        filterName="Level 4"
+        @click="handleOverallComparisonUpdate('OverallComparisonLevel4', 'backgroundvar5')"
+      />
+      <Buttonsimple  
+        filterName="Type"
+        @click="handleOverallComparisonUpdate('OverallComparisonType', 'backgroundvar1')"
+      />
+      <Buttonsimple  
+        filterName="Factor"
+        @click="handleOverallComparisonUpdate('OverallComparisonFactor', 'factortext_en')"
+      />
+
+      <Buttonsimple 
+        :filterName="'Reset'" 
+        @click="handleOverallComparisonReset()"   
+      />
+      <Buttonsimple 
+        :filterName="'Test'" 
+        @click="handletest()"   
+      />
     </div>
+
   </div>
 
   <div class="card-container">
