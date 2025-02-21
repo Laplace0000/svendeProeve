@@ -28,6 +28,14 @@ const OverallComparisonLevel4 = ref("");
 const OverallComparisonType = ref("");
 const OverallComparisonFactor = ref("");
 
+const OverallComparisonPacket = ref({
+  level1: OverallComparisonLevel1,
+  level2: OverallComparisonLevel2,
+  level3: OverallComparisonLevel3,
+  level4: OverallComparisonLevel4,
+  type: OverallComparisonType,
+  factor: OverallComparisonFactor
+});
 watch(selectedFiltersDropdown, (newVal) => {
   console.log("Filters updated:", JSON.stringify(newVal, null, 2));
 }, { deep: true });
@@ -149,6 +157,7 @@ const converteddata = ref(injectedData.eudemosData);
       :chosenFactor="selectedfactor" 
       :companyChoice="companyChoice"
       :dropdownfilters="selectedFiltersDropdown" 
+      :overallfiltering="OverallComparisonPacket" 
       @buttonClicked="handleClickCompany"
     />
 
@@ -160,6 +169,7 @@ const converteddata = ref(injectedData.eudemosData);
       :chosenFactor="selectedfactor" 
       :companyChoice="companyChoice"
       :dropdownfilters="selectedFiltersDropdown" 
+      :overallfiltering="OverallComparisonPacket" 
       @buttonClicked="handleClickCompany"
     />
 
@@ -171,6 +181,7 @@ const converteddata = ref(injectedData.eudemosData);
       :chosenFactor="selectedfactor" 
       :companyChoice="companyChoice"
       :dropdownfilters="selectedFiltersDropdown" 
+      :overallfiltering="OverallComparisonPacket" 
       @buttonClicked="handleClickCompany"
     />
   </div>
@@ -217,7 +228,7 @@ const converteddata = ref(injectedData.eudemosData);
   </div>
 
   <div class="card-container">
-    <redflagGraph type="chapter_en" :data="converteddata" :topicFilter="topicFilter" :chosenChapter="selectedchapter" :chosenFactor="selectedfactor" :dropdownfilters="selectedFiltersDropdown" />
+    <redflagGraph type="chapter_en" :data="converteddata" :topicFilter="topicFilter" :chosenChapter="selectedchapter" :chosenFactor="selectedfactor" :dropdownfilters="selectedFiltersDropdown" :overallfiltering="OverallComparisonPacket" />
   </div>
 </template>
 

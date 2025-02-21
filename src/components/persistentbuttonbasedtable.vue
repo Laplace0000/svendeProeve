@@ -10,6 +10,7 @@ const props = defineProps({
   chosenFactor: String,
   companyChoice: String,
   dropdownfilters: Object,
+  overallfiltering: Object,
 });
 
 // Compute the title dynamically based on type
@@ -19,6 +20,8 @@ const title = computed(() => {
   if (props.type === "high") return "Something needs to be done:";
   return "";
 });
+
+
 
 // Function to filter data based on topic filter, chapter, and factor
 const filteredData = computed(() => {

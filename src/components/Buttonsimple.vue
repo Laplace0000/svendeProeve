@@ -18,9 +18,7 @@ export default {
       }
   },
   methods: {
-      handleClick(event) { // ✅ Accept event parameter
-          event.stopPropagation(); // ✅ Correct way to prevent bubbling
-          this.$emit("click"); // Emit click event to the parent
+      handleClick(event) { // Accept event parameter
           console.log(this.filterName);
       }
   }
