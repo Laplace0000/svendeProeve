@@ -24,27 +24,34 @@ const title = computed(() => {
   return "";
 });
 
-// **Function to filter data based on all criteria (dropdowns + overall filtering)**
+// **Merge columns based on selected filters in overallfiltering**
+const mergedData = computed(() => {
+  return props.data.map(item => {
+    let mergedKey = item.backgroundvar2; // Default title column
+    
+    Object.keys(overallFilters).forEach((key) => {
+      if (overallFilters[key].value) {
+        mergedKey += ` | ${item[overallFilters[key].value] || ''}`;
+      }
+    });
+    
+    return { ...item, mergedKey };
+  });
+});
+
+// **Filter data based on selected criteria**
 const filteredData = computed(() => {
-  return props.data.filter((item) => {
+  return mergedData.value.filter((item) => {
     const matchesTopic = item.topic_en === props.topicFilter;
     const matchesChapter = !props.chosenChapter || item.chapter_en === props.chosenChapter;
     const matchesFactor = !props.chosenFactor || item.factor_en === props.chosenFactor;
 
     let includeItem = true;
-
-    // **Apply dropdown filters**
+    
+    // Apply dropdown filters
     Object.keys(props.dropdownfilters).forEach((filterKey) => {
       const selectedValues = props.dropdownfilters[filterKey].map(val => val.backgroundvar);
       if (selectedValues.length && !selectedValues.includes(item[filterKey])) {
-        includeItem = false;
-      }
-    });
-
-    // **Apply overall filtering criteria**
-    Object.keys(overallFilters).forEach((key) => {
-      const filterValue = overallFilters[key].value;
-      if (filterValue && item[key] !== undefined && item[key] !== filterValue) {
         includeItem = false;
       }
     });
@@ -53,11 +60,11 @@ const filteredData = computed(() => {
   });
 });
 
-// **Group data using filteredData, grouped by `backgroundvar2`**
+// **Group data using mergedKey**
 const groupedData = computed(() => {
   const grouped = {};
   filteredData.value.forEach((item) => {
-    const key = item.backgroundvar2;
+    const key = item.mergedKey;
     if (!grouped[key]) {
       grouped[key] = { count: 0, redFlagCount: 0 };
     }

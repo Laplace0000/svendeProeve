@@ -149,43 +149,7 @@ const converteddata = ref(injectedData.eudemosData);
     <buttonbasedTable type="chapter_en" :data="converteddata" :topicFilter="topicFilter" :chosenChapter="selectedchapter" :chosenFactor="selectedfactor" :dropdownfilters="selectedFiltersDropdown" @buttonClicked="handleButtonClickchapter" />
     <buttonbasedTable type="factor_en" :data="converteddata" :topicFilter="topicFilter" :chosenChapter="selectedchapter" :chosenFactor="selectedfactor" :dropdownfilters="selectedFiltersDropdown" @buttonClicked="handleButtonClickfactor" />
   </div>
-  <div class="card-container">
-    <persistentbuttonbasedtable 
-      type="low" 
-      :data="converteddata" 
-      :topicFilter="topicFilter" 
-      :chosenChapter="selectedchapter" 
-      :chosenFactor="selectedfactor" 
-      :companyChoice="companyChoice"
-      :dropdownfilters="selectedFiltersDropdown" 
-      :overallfiltering="OverallComparisonPacket" 
-      @buttonClicked="handleClickCompany"
-    />
 
-    <persistentbuttonbasedtable 
-      type="medium" 
-      :data="converteddata" 
-      :topicFilter="topicFilter" 
-      :chosenChapter="selectedchapter" 
-      :chosenFactor="selectedfactor" 
-      :companyChoice="companyChoice"
-      :dropdownfilters="selectedFiltersDropdown" 
-      :overallfiltering="OverallComparisonPacket" 
-      @buttonClicked="handleClickCompany"
-    />
-
-    <persistentbuttonbasedtable 
-      type="high" 
-      :data="converteddata" 
-      :topicFilter="topicFilter" 
-      :chosenChapter="selectedchapter" 
-      :chosenFactor="selectedfactor" 
-      :companyChoice="companyChoice"
-      :dropdownfilters="selectedFiltersDropdown" 
-      :overallfiltering="OverallComparisonPacket" 
-      @buttonClicked="handleClickCompany"
-    />
-  </div>
 
   <div class="card">
     <b> Overall comparison</b>
@@ -222,6 +186,43 @@ const converteddata = ref(injectedData.eudemosData);
       />
 
     </div>
+    <div class="card-container">
+    <persistentbuttonbasedtable 
+      type="low" 
+      :data="converteddata" 
+      :topicFilter="topicFilter" 
+      :chosenChapter="selectedchapter" 
+      :chosenFactor="selectedfactor" 
+      :companyChoice="companyChoice"
+      :dropdownfilters="selectedFiltersDropdown" 
+      :overallfiltering="OverallComparisonPacket" 
+      @buttonClicked="handleClickCompany"
+    />
+
+    <persistentbuttonbasedtable 
+      type="medium" 
+      :data="converteddata" 
+      :topicFilter="topicFilter" 
+      :chosenChapter="selectedchapter" 
+      :chosenFactor="selectedfactor" 
+      :companyChoice="companyChoice"
+      :dropdownfilters="selectedFiltersDropdown" 
+      :overallfiltering="OverallComparisonPacket" 
+      @buttonClicked="handleClickCompany"
+    />
+
+    <persistentbuttonbasedtable 
+      type="high" 
+      :data="converteddata" 
+      :topicFilter="topicFilter" 
+      :chosenChapter="selectedchapter" 
+      :chosenFactor="selectedfactor" 
+      :companyChoice="companyChoice"
+      :dropdownfilters="selectedFiltersDropdown" 
+      :overallfiltering="OverallComparisonPacket" 
+      @buttonClicked="handleClickCompany"
+    />
+  </div>
 
   </div>
 
