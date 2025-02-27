@@ -126,22 +126,24 @@ const converteddata = ref(injectedData.eudemosData);
 </script>
 
 <template>
-  <div class="button-container">
-    <dropdownUniques backgroundvar="backgroundvar2" title="Level 1" :data="converteddata" @update:selected="updateSelection" />
-    <dropdownUniques backgroundvar="backgroundvar3" title="Level 2" :data="converteddata" @update:selected="updateSelection" />
-    <dropdownUniques backgroundvar="backgroundvar4" title="Level 3" :data="converteddata" @update:selected="updateSelection" />
-    <dropdownUniques backgroundvar="backgroundvar5" title="Level 4" :data="converteddata" @update:selected="updateSelection" />
-    <dropdownUniques backgroundvar="backgroundvar1" title="type" :data="converteddata" @update:selected="updateSelection" />
-  </div>
 
-  <div class="card">
-    <div class="button-container">
-      <Buttonsimple :filterName="'Health factors'" @click="handlefactorchapterReset('#1 Health factors')" />
-      <Buttonsimple :filterName="'Important overload factors'" @click="handlefactorchapterReset('#2 Important overload factors (Topic)')" />
-      <Buttonsimple :filterName="'Work causes'" @click="handlefactorchapterReset('#3 Work causes')" />
-      <Buttonsimple :filterName="'Relationship causes'" @click="handlefactorchapterReset('#4 Relationship causes')" />
-      <Buttonsimple :filterName="'Cultural causes'" @click="handlefactorchapterReset('#5 Cultural causes')" />
-      <Buttonsimple :filterName="'Occupational Health'" @click="handlefactorchapterReset('#6 Occupational Health')" />
+  <div>
+    <div class="card">
+      <div class="button-container">
+        <Buttonsimple :filterName="'Health factors'" @click="handlefactorchapterReset('#1 Health factors')" />
+        <Buttonsimple :filterName="'Important overload factors'" @click="handlefactorchapterReset('#2 Important overload factors (Topic)')" />
+        <Buttonsimple :filterName="'Work causes'" @click="handlefactorchapterReset('#3 Work causes')" />
+        <Buttonsimple :filterName="'Relationship causes'" @click="handlefactorchapterReset('#4 Relationship causes')" />
+        <Buttonsimple :filterName="'Cultural causes'" @click="handlefactorchapterReset('#5 Cultural causes')" />
+        <Buttonsimple :filterName="'Occupational Health'" @click="handlefactorchapterReset('#6 Occupational Health')" />
+      </div>
+      <div class="button-container">
+        <dropdownUniques backgroundvar="backgroundvar2" title="Level 1" :data="converteddata" @update:selected="updateSelection" />
+        <dropdownUniques backgroundvar="backgroundvar3" title="Level 2" :data="converteddata" @update:selected="updateSelection" />
+        <dropdownUniques backgroundvar="backgroundvar4" title="Level 3" :data="converteddata" @update:selected="updateSelection" />
+        <dropdownUniques backgroundvar="backgroundvar5" title="Level 4" :data="converteddata" @update:selected="updateSelection" />
+        <dropdownUniques backgroundvar="backgroundvar1" title="type" :data="converteddata" @update:selected="updateSelection" />
+      </div>
     </div>
   </div>
 
@@ -226,25 +228,98 @@ const converteddata = ref(injectedData.eudemosData);
 
   </div>
 
-  <div class="card-container">
+  <div class="card-container_2">
     <redflagGraph type="chapter_en" :data="converteddata" :topicFilter="topicFilter" :chosenChapter="selectedchapter" :chosenFactor="selectedfactor" :dropdownfilters="selectedFiltersDropdown" :overallfiltering="OverallComparisonPacket" />
   </div>
 </template>
 
 <style scoped>
-/* Flexbox container for side-by-side layout */
-.card-container {
-  display: flex;
-  gap: 20px; /* Adjusts spacing between the two tables */
-  justify-content: center; /* Centers both tables horizontally */
-  align-items: flex-start; /* Aligns tables at the top */
-  flex-wrap: wrap; /* Allows wrapping on smaller screens */
+:global(body) {
+  background-color: white;
+  color: black;
+  margin: 40px; /* Removes default margin */
+  padding: 0; /* Removes default padding */
+
 }
 
-/* Optional: Ensuring each button table takes equal space */
-buttonbasedTable {
-  flex: 1; /* Each table takes equal space */
-  min-width: 300px; /* Prevents excessive shrinking */
-  max-width: 600px; /* Limits maximum width */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr; /* Three columns: left, center (middle), right */
+    grid-template-rows: auto; /* Let rows expand based on content */
+    gap: 20px; /* Space between elements */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
+
+.middle-column {
+    grid-column: 2; /* Place all items in the middle column */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align elements */
+    gap: 20px; /* Space between items */
+}
+
+
+.button-container {
+  display: flex;
+  max-width: 1200px; /* Set a maximum width */
+  justify-content: center; /* Center buttons horizontally */
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  gap: 10px;
+  margin-bottom: 20px; 
+}
+
+.card-container {
+  max-width: 1200px; /* Set a maximum width */
+  display: flex;
+  flex-direction: row; /* Align elements side by side */
+  justify-content: center; /* Center align items horizontally */
+  align-items: flex-start; /* Align items at the top */
+  width: 100%; /* Adjust width as needed */
+  gap: 10px; /* Adds spacing between elements */
+  margin-bottom: 20px; 
+}
+
+.card-container_2 {
+  max-width: 1200px; /* Set a maximum width */
+  background-color: grey;
+  display: flex;
+  flex-direction: row; /* Align elements side by side */
+  justify-content: center; /* Center align items horizontally */
+  align-items: flex-start; /* Align items at the top */
+  width: 100%; /* Adjust width as needed */
+  gap: 10px; /* Adds spacing between elements */
+  margin-bottom: 20px; 
+}
+
+
+.card {
+  max-width: 1200px; /* Set a maximum width */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align */
+  width: 100%;
+
+}
+
+.button-container {
+  max-width: 1200px; /* Set a maximum width */
+
+  display: flex;
+  justify-content: space-between; /* Evenly spaces dropdowns */
+  gap: 10px; /* Adjusts spacing between elements */
+  align-items: center; /* Aligns dropdowns in the center */
+  flex-wrap: nowrap; /* Prevents wrapping onto new lines */
+}
+
+/* If you want equal width for dropdowns */
+.button-container dropdownUniques {
+  flex: 1; /* Ensures dropdowns take equal space */
+  min-width: 120px; /* Prevents them from getting too small */
+}
+
+
+
 </style>
